@@ -56,11 +56,9 @@ def load_data(file_name, float_mean=5):
 
 
 def filter_signal(sig):
-    sig = filter.notch_filter(x=sig.astype(np.float64),
-                              Fs=SAMPLE_FREQ,
-                              freqs=[50],
-                              trans_bandwidth=2,
-                              verbose=0)
+    freq = 50 / (0.5 * SAMPLE_FREQ)
+    b, a = signal.iirnotch(freq, Q=freq / 2.)
+    sig = signal.lfilter(b, a, sig)
     b, a = signal.butter(5, Wn=np.array([0.5, 30]) / (0.5 * SAMPLE_FREQ),
                          btype='band')
     sig = signal.lfilter(b, a, sig)
