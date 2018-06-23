@@ -43,19 +43,22 @@ def load_data(file_name, float_mean=5):
     >>> len(eeg) > 0
     True
     """
-    ft_mean_samples = int(float_mean * SAMPLE_FREQ)
     data = np.fromfile(file_name, dtype='float32')
     data = data.reshape(-1, 17)
     eeg = data[:, :8]
-    means = np.array([np.mean(eeg[i:ft_mean_samples+i], axis=0)
-                      for i in range(len(eeg) - ft_mean_samples)])
-    eeg = eeg[ft_mean_samples:] - means
+    # the mean filtering should be solved by band pass filter
+    # ft_mean_samples = int(float_mean * SAMPLE_FREQ)
+    # means = np.array([np.mean(eeg[i:ft_mean_samples+i], axis=0)
+    #                   for i in range(len(eeg) - ft_mean_samples)])
+    # eeg = eeg[ft_mean_samples:] - means
     for i in range(eeg.shape[1]):
         eeg[:, i] = filter_signal(eeg[:, i])
     return eeg
 
 
-def filter_signal(sig):
+def filter_signal(sig, bands=None):
+    if bands is None:
+        bands = [0.1, 120]
     freq = 50 / (0.5 * SAMPLE_FREQ)
     b, a = signal.iirnotch(freq, Q=freq / 2.)
     sig = signal.lfilter(b, a, sig)
