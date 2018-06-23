@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  app:  #&app
+    container_name: app-bci_challenge
+    build:
+      context: .
+      dockerfile: ./docker/local/backend/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+      - ./shared/media:/app/shared/media
+      - ./shared/static:/app/shared/static
+      - ./shared/templates:/app/shared/templates
+
+  redis:
+    container_name: redis-bci_challenge
+    image: redis:3.0
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env

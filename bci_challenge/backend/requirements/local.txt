@@ -1,0 +1,72 @@
+# Local development dependencies go here
+-r base.txt
+
+# Create documentation
+Sphinx==1.7.5
+
+# Code coverage
+coverage==4.5.1
+
+# Collection of useful extensions
+django-extensions==2.0.7
+
+# WSGI utility
+Werkzeug==0.14.1
+
+# Wery useful toolbar for debuging project
+django-debug-toolbar==1.9.1
+
+# measure Django template execution
+django-coverage-plugin==1.5.0
+
+# TODO: Remove when replace all test to pytest
+django-test-plus==1.0.20
+
+# Python debugger
+pudb==2018.1
+
+# create model fixture
+factory-boy==2.11.1
+
+# best testing framework
+pytest>=3.6.0
+
+# pytest plugin produces coverage reports
+pytest-cov>=2.5.1
+
+# testing django with pytest
+pytest-django>=3.2.1
+
+# distributed testing and loop-on-failing modes
+pytest-xdist>=1.22.2
+
+# changes the default look test results
+pytest-sugar==0.9.1
+
+# pytest plugin for faker
+pytest-faker>=2.0.0
+
+# pytest plugin for mock module
+pytest-mock>=1.10.0
+
+# pytest plugin for pudb
+pytest-pudb==0.6
+
+# pytest plugin for factoryboy
+pytest-factoryboy==2.0.1
+
+# app for create functional testing
+django-webtest>=1.9.3
+
+# very easy request mock
+requests-mock==1.5.0
+
+# jupyter module
+jupyter==1.0.0
+
+# code audit tool
+pylama==7.4.3
+pylama-pylint==3.0.1
+pylint-django==0.11.1
+# pylint-celery==0.3
+radon==2.2.0
