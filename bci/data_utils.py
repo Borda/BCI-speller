@@ -30,7 +30,7 @@ def update_path(path, max_up=5):
     return path
 
 
-def load_data(file_name, float_mean=5):
+def load_data(file_name, bands=(0.5, 120)):
     """ loading data from a file
 
     :param str file_name: file name
@@ -52,11 +52,11 @@ def load_data(file_name, float_mean=5):
     #                   for i in range(len(eeg) - ft_mean_samples)])
     # eeg = eeg[ft_mean_samples:] - means
     for i in range(eeg.shape[1]):
-        eeg[:, i] = filter_signal(eeg[:, i])
+        eeg[:, i] = filter_signal(eeg[:, i], bands)
     return eeg
 
 
-def filter_signal(sig, bands=(0.1, 120)):
+def filter_signal(sig, bands=(0.5, 120)):
     freq = 50 / (0.5 * SAMPLE_FREQ)
     b, a = signal.iirnotch(freq, Q=freq / 2.)
     sig = signal.lfilter(b, a, sig)
