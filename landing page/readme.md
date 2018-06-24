@@ -21,7 +21,7 @@
 - When you have some letter box scaled up, automatically switch from one letter to another (every 3 seconds), and then to Cancel button. Then continue with again with first letter in that letter box (until user selects something)
 
 # Gestures / Signals
-- When some letter box is focused, and user sends signal (`1 click`), letter box will scale-up.
+- When some letter box is focused, and user sends signal (`1 click`), letter box will scale-up. It should be appliad new class `.letter-activated` to the div with the class `keyboard`
 - When some letter box is scaled up, and user sends signal (`1 click`), letter will be written into text area. Letter box then scales down and we automatically start another automatic switching from "A B C" letter box
 - When user send `2-click signal`, we switch between rows. When we get to the 3rd row, and user sends 2-click signal, we switch to first row again. When user has 3rd highlighted and sends `1-click signal`, we send the message (message should appear up in the white area and text from input should be deleted).
 

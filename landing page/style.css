@@ -190,7 +190,7 @@ button.main span {
 
 
 .keyboard.letter-activated .letter-box {
-  opacity: 0.3;
+  opacity: 0.05;
 }
 
 .keyboard .letter-box:last-of-type {
