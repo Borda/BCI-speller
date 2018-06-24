@@ -1,5 +1,6 @@
 """
 THe basic app for listening BCI and sending singals do BackEnd
+
 """
 
 import sys
@@ -24,6 +25,7 @@ SIGNAL_RANGE = [-250, 250]
 FRAME_REFRESH = 100  # miliseconds
 MEASURE_FRAME = int(0.1 * SAMPLING_FREQ)
 DOUBLE_DELAY = 0.5
+BITING_THRESHOLD = 10000
 
 # first resolve an EEG stream on the lab network
 print("looking for an EEG stream...")
@@ -87,7 +89,7 @@ class Window(QtWidgets.QDialog):
         sig = tl_data.filter_signal(self.signals[:, 0], bands=[1, 120])
         measure = np.mean(sig[-MEASURE_FRAME:] ** 2)
         # print (measure)
-        if measure > 10000 and not self.biting:
+        if measure > BITING_THRESHOLD and not self.biting:
             logging.debug('biting')
             self.biting = True
             self.bite_wait += 1
@@ -132,7 +134,7 @@ class Window(QtWidgets.QDialog):
                 # sig = sig - np.mean(sig)
                 ax.plot(sig[PLOT_OFFSET:],
                         label=str(ch + 1))
-            #ax.set_xlim([min(self.timestamps), max(self.timestamps)])
+            # ax.set_xlim([min(self.timestamps), max(self.timestamps)])
             ax.legend(loc=2)
         ax.set_ylim(SIGNAL_RANGE)
         ax.grid()

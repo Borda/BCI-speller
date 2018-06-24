@@ -7,7 +7,7 @@ import os
 
 import numpy as np
 from scipy import signal
-from mne import filter
+# from mne import filter
 
 SAMPLE_FREQ = 250.
 
@@ -30,8 +30,8 @@ def update_path(path, max_up=5):
     return path
 
 
-def load_data(file_name, bands=(0.5, 120)):
-    """ loading data from a file
+def load_data(file_name, bands=(0.5, 120), eeg_channels=8):
+    """ loading data from a binary (raw) file
 
     :param str file_name: file name
     :param float float_mean: floating mean in seconds
@@ -45,12 +45,7 @@ def load_data(file_name, bands=(0.5, 120)):
     """
     data = np.fromfile(file_name, dtype='float32')
     data = data.reshape(-1, 17)
-    eeg = data[:, :8]
-    # the mean filtering should be solved by band pass filter
-    # ft_mean_samples = int(float_mean * SAMPLE_FREQ)
-    # means = np.array([np.mean(eeg[i:ft_mean_samples+i], axis=0)
-    #                   for i in range(len(eeg) - ft_mean_samples)])
-    # eeg = eeg[ft_mean_samples:] - means
+    eeg = data[:, :eeg_channels]
     for i in range(eeg.shape[1]):
         eeg[:, i] = filter_signal(eeg[:, i], bands)
     return eeg
@@ -65,3 +60,6 @@ def filter_signal(sig, bands=(0.5, 120)):
                              btype='band')
         sig = signal.lfilter(b, a, sig)
     return sig
+
+
+# TODO: online data filtering
