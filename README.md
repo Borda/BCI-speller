@@ -20,3 +20,13 @@ The can be streamed from the BCI device in following 17 channels, each as float3
 **Required preprocessing**
 * remove the moise caused by electricity - 50Hz, use Notch filter
 * band pass filter on 0.5 to 30Hz
+
+
+## Applications
+
+the basic application for decoding BCI sinal is in apps folder
+
+Minor TODOS:
+* real time filtering to speed up the app, now it is filterd by frames
+* integrate the event from detection app
+* detect blinking

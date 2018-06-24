@@ -1,9 +1,11 @@
+"""
+THe basic app for listening BCI and sending singals do BackEnd
+"""
+
 import sys
-import time
 import numpy as np
 import pylsl
 from PyQt5 import QtCore, QtWidgets
-# from PyQt5.QtWidgets import QDialog, QApplication, QPushButton, QVBoxLayout
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -78,11 +80,18 @@ class Window(QtWidgets.QDialog):
         measure = np.mean(sig[-MEASURE_FRAME:] ** 2)
         # print (measure)
         if measure > 10000 and not self.biting:
-            # TODO: integrate to App
-            print('Bite!', measure)
+            self.on_event_bite()
             self.biting = True
         else:
             self.biting = False
+
+    def on_event_bite(self):
+        # TODO: integrate to App
+        print('Bite!')
+
+    def on_event_blink(self):
+        # TODO: integrate to App
+        print('Blink!')
 
     def plot(self):
         # instead of ax.hold(False)
