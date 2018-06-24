@@ -5,3 +5,4 @@ sklearn
 mne
 pylsl
 PyQt5
+websocket-client==0.48.0

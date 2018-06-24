@@ -12,6 +12,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 import matplotlib.pyplot as plt
 
 import bci.data_utils as tl_data
+from .websocket_client import WebSocketClient
 
 SAMPLING_FREQ = 250
 RECORD_HISTORY = 5 * SAMPLING_FREQ
@@ -27,6 +28,8 @@ streams = pylsl.resolve_stream('type', 'EEG')
 
 # create a new inlet to read from the stream
 inlet = pylsl.StreamInlet(streams[0])
+
+websocket = WebSocketClient('ws://192.168.7.14:8000/ws/bci/U123/')
 
 
 class Window(QtWidgets.QDialog):
@@ -86,12 +89,10 @@ class Window(QtWidgets.QDialog):
             self.biting = False
 
     def on_event_bite(self):
-        # TODO: integrate to App
-        print('Bite!')
+        websocket.send_data('bite', 1)
 
     def on_event_blink(self):
-        # TODO: integrate to App
-        print('Blink!')
+        websocket.send_data('blink', 1, eyes='both')
 
     def plot(self):
         # instead of ax.hold(False)
