@@ -20,17 +20,9 @@
     currentLetterBox.toggleClass('focused')
   }
 
-  function focusOnNextLetterDiv (letterDiv) {
-    if (letterDiv === null) {
-      letterDiv = currentLetterBox.children()[1]
-    }
-    currentLetterDiv = letterDiv.next()
-    // set selector class to selector
-    if (currentLetterDiv.length == 0) {
-      currentLetterDiv = letterDiv.siblings()[1]
-    }
-    // apply new selector position class
-    currentLetterDiv.toggleClass('focused')
+  function focusOnNextLetterDiv (letterDiv, position, selector) {
+    selector.removeClass('place' + '-' + position)
+    selector.addClass('place' + '-' + (position + 1))
   }
 
   function activateLetterBox (letterBox) {
@@ -74,20 +66,24 @@
   var activeLetter = null
 
   function mainLoop () {
+    let position = 1;
+    var selector = null;
     if (!currentLetterBox.hasClass('active')) {
       focusOnNextLetterBox(currentLetterBox)
     } else {
-      var selector = currentLetterBox.children().first()
-      // just update `currentLetterDiv` here
-      if (selector.hasClass('place-1')) {
-        // write  second letter
-      } else if (selector.hasClass('place-2')) {
-        // write  second letter
-        // and so on fo other elements
-      } else {
-        // cancel button
+      selector = currentLetterBox.children().first()
+      position = selector.attr('class').split(' ').pop()
+      position = parseInt(position.split('-').pop())
+      try {
+        let letter = currentLetterBox.children()[position].innerText
+      } catch (e) {
+        console.log('cancel')
+        position = 1
       }
-      focusOnNextLetterDiv(currentLetterDiv)
+      if(!currentLetterDiv){
+        currentLetterDiv = currentLetterBox.children()[position]
+      }
+      focusOnNextLetterDiv(currentLetterDiv, position, selector)
     }
   }
 
