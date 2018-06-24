@@ -1,0 +1,264 @@
+body {
+	background: #F5F7F9;
+	color: #171B1E;
+	font-family: 'IBM Plex Sans', sans-serif;
+	padding-top: 200px;
+
+}
+
+@keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-moz-keyframes blink {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-webkit-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-ms-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-o-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+* {
+	box-sizing: border-box;
+}
+
+img {
+	max-width: 100%;
+}
+
+
+.message-container {
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	background: #fff;
+	z-index: 100;
+	padding: 100px;
+	min-height: 800px;
+    box-shadow: 0px 0px 16px -2px rgba(21,88,141,0.8);
+	transition: all 1.5s ease-in-out;
+}
+
+.active .message-container {
+	min-height: 100px;
+	padding: 50px;
+}
+
+.message-container .message {
+	width: 500px;
+	margin: 0 auto;
+	transform: scale(0.5);
+	transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	opacity: 0;
+	position: relative;
+	left: -50px;
+}
+
+.message-container.active .message,
+.active .message-container .message {
+	opacity: 100;
+	transform: scale(1);
+}
+
+.message-container .message .profile {
+	float: left;
+	width: 50px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.message-container .message .content {
+	float: right;
+	width: 430px;
+	background: #D6F7C9;
+	padding: 20px;
+	font-size: 20px;
+	border-radius: 6px;
+}
+
+button.main {
+    z-index: 90;
+    height: 60px;
+    border-radius: 30px;
+    background: #0176D2;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 30px auto;
+    display: block;
+    width: 250px;
+    letter-spacing: 3px;
+    transition: all 0.5s ease-in-out;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.main span {
+	margin-left: 10px;
+}
+
+button.main.focused {
+    box-shadow: 0px 0px 16px -2px rgba(21,88,141,0.8);
+    transform: scale(1.1);
+}
+
+.blinking-cursor {
+	width: 2px;
+	height: 40px;
+	display: inline-block;
+	animation: 1s blink step-end infinite;
+}
+
+.new-message {
+	width: 600px;
+	margin: 0 auto;
+	border-bottom: 2px solid #0176D2;
+	padding: 10px 0;
+}
+
+.new-message #new-text {
+	font-size: 30px;
+	font-weight: 600;
+	display: inline-block;
+	text-align: center;
+}
+
+.keyboard {
+	width: 680px;
+	margin: 50px auto;
+}
+
+.keyboard .row {
+	display: flex;
+	justify-content: space-between;
+}
+
+.keyboard .letter-box {
+	display: inline-block;
+	padding: 10px 15px;
+	background: black;
+	color: white;
+	font-size: 18px;
+	font-weight: bold;
+	margin-right: 10px;
+	border-radius: 6px;
+	transition: transform 1.5s ease-in-out;
+}
+
+.keyboard .letter-box div.letter {
+	display: inline-block;
+	width: 30px;
+	text-align: center;
+    position: relative;
+    z-index: 11;
+}
+
+
+
+.keyboard.letter-activated .letter-box {
+	opacity: 0.3;
+}
+
+.keyboard .letter-box:last-of-type {
+	margin-right: 0;
+}
+
+.keyboard .letter-box .selector {
+    width: 30px;
+    background: #259C35;
+    height: 78px;
+    position: absolute;
+    top: -5px;
+    z-index: 10;
+    left: 15px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.keyboard .letter-box .selector svg {
+	position: absolute;
+    bottom: 8px;
+    left: 8px;
+}
+
+.keyboard .letter-box .selector.place-2 {
+	left: 45px;
+}
+
+.keyboard .letter-box .selector.place-3 {
+	left: 75px;
+}
+
+.keyboard .letter-box .selector.place-cancel {
+	left: 120px;
+}
+
+.keyboard .letter-box .cancel {
+ display: none;
+}
+
+.keyboard .letter-box.active .cancel {
+	display: inline-block;
+    margin-left: 20px;
+    position: relative;
+    top: 3px;
+    z-index: 11;
+}
+
+.keyboard .letter-box.active {
+    background: #0176D2;
+    transform: scale(2);
+    z-index: 100;
+	box-shadow: 0px 0px 16px -2px rgba(21,88,141,0.8);
+    margin-right: -15px;
+    opacity: 1;
+}
+
+.keyboard .letter-box.active .selector {
+    opacity: 1;
+}
+
+
+.keyboard .row {
+	margin-bottom: 15px;
+}
+
+.keyboard .row-second {
+	    margin: 0 40px;
+}
