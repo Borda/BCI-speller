@@ -37,7 +37,7 @@ def load_data(file_name, float_mean=5):
     :param float float_mean: floating mean in seconds
     :return:
 
-    >>> p_data = os.path.join(update_path('local_data'), 'blinking', 'both.bin')
+    >>> p_data = os.path.join(update_path('data_samples'), 'blinking', 'both.bin')
     >>> eeg = load_data(p_data)  # doctest: +ELLIPSIS
     ...
     >>> len(eeg) > 0
@@ -56,13 +56,12 @@ def load_data(file_name, float_mean=5):
     return eeg
 
 
-def filter_signal(sig, bands=None):
-    if bands is None:
-        bands = [0.1, 120]
+def filter_signal(sig, bands=(0.1, 120)):
     freq = 50 / (0.5 * SAMPLE_FREQ)
     b, a = signal.iirnotch(freq, Q=freq / 2.)
     sig = signal.lfilter(b, a, sig)
-    b, a = signal.butter(5, Wn=np.array([0.5, 30]) / (0.5 * SAMPLE_FREQ),
-                         btype='band')
-    sig = signal.lfilter(b, a, sig)
+    if bands is not None:
+        b, a = signal.butter(5, Wn=np.array(bands) / (0.5 * SAMPLE_FREQ),
+                             btype='band')
+        sig = signal.lfilter(b, a, sig)
     return sig

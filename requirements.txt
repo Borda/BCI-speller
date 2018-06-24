@@ -3,3 +3,5 @@ scipy
 matplotlib
 sklearn
 mne
+pylsl
+PyQt5

@@ -10,7 +10,7 @@ language: python
 sudo: false
 
 python:
-  - 2.7
+  # - 2.7  # not supported by Qt5
   # - 3.4  # will be deprecated for pandas
   - 3.5
   - 3.6
@@ -20,6 +20,9 @@ python:
 cache: pip
 
 before_install:
+  # - sudo apt-get install -y python-pyside pyside-tools
+  # - sudo apt-get python-qt4 pyqt4-dev-tools
+  # - sudo apt-get install python-qt5 python3-qt5
   - pip install --upgrade pip
   - gcc --version ; python --version ; pip --version ; pwd ; ls -l
 
