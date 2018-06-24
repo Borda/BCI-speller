@@ -3,6 +3,8 @@ THe basic app for listening BCI and sending singals do BackEnd
 """
 
 import sys
+import time
+import logging
 import numpy as np
 import pylsl
 from PyQt5 import QtCore, QtWidgets
@@ -12,7 +14,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 import matplotlib.pyplot as plt
 
 import bci.data_utils as tl_data
-from .websocket_client import WebSocketClient
+from apps.websocket_client import WebSocketClient
 
 SAMPLING_FREQ = 250
 RECORD_HISTORY = 5 * SAMPLING_FREQ
@@ -21,6 +23,7 @@ EEG_CHANNELS = 1
 SIGNAL_RANGE = [-250, 250]
 FRAME_REFRESH = 100  # miliseconds
 MEASURE_FRAME = int(0.1 * SAMPLING_FREQ)
+DOUBLE_DELAY = 0.5
 
 # first resolve an EEG stream on the lab network
 print("looking for an EEG stream...")
@@ -42,6 +45,8 @@ class Window(QtWidgets.QDialog):
         # data
         self.signals = None
         self.biting = False
+        self.bite_last = -np.inf
+        self.bite_wait = 0
 
         # this is the Canvas Widget that displays the `figure`
         # it takes the `figure` instance as a parameter to __init__
@@ -83,15 +88,32 @@ class Window(QtWidgets.QDialog):
         measure = np.mean(sig[-MEASURE_FRAME:] ** 2)
         # print (measure)
         if measure > 10000 and not self.biting:
-            self.on_event_bite()
+            logging.debug('biting')
             self.biting = True
+            self.bite_wait += 1
+            self.bite_last = time.time()
         else:
             self.biting = False
 
-    def on_event_bite(self):
+        # logic for double bites within 0.5s
+        delay = time.time() - self.bite_last
+        if self.biting and self.bite_wait > 1 and delay <+ DOUBLE_DELAY:
+            self.on_event_bite_double()
+            self.bite_wait = 0
+        elif not self.biting and self.bite_wait == 1 and  delay > DOUBLE_DELAY:
+            self.on_event_bite_single()
+            self.bite_wait = 0
+
+    def on_event_bite_double(self):
+        logging.info('Bite Double! t:%f', time.time())
+        websocket.send_data('bite', 2)
+
+    def on_event_bite_single(self):
+        logging.info('Bite! t:%f', time.time())
         websocket.send_data('bite', 1)
 
     def on_event_blink(self):
+        logging.info('Blink!')
         websocket.send_data('blink', 1, eyes='both')
 
     def plot(self):
@@ -119,6 +141,7 @@ class Window(QtWidgets.QDialog):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     app = QtWidgets.QApplication(sys.argv)
 
     main = Window()
