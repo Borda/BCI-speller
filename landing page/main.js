@@ -21,6 +21,7 @@
           writeletter.onExit(evt, 'letter')
         }
         console.log(evt.target.innerText)
+        console.log(evt.target)
       },
       onExit: function( evt, nextState ) {
         // jquery(this).removeClass('active')
@@ -63,7 +64,7 @@
 
   // WEBSOCKETS STUFF
   var webSocket = jquery.simpleWebSocket({
-    url: 'ws://localhost:8000/ws/bci/U123/'
+    url: 'ws://192.168.7.14:8000/ws/bci/U123/'
   })
 
     // reconnected listening
