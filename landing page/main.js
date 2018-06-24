@@ -1,66 +1,42 @@
 (function (jquery) {
   // ROW MACHINE
-  jquery(".letter-box").machine({
-    inactive: {
-      defaultState: false,
-    },
-    letter: {
-      defaultState: true,
-      events: {
-        click: "writeletter",
-        dblclick: "nextletter",
-      },
-      onEnter: function( evt, previousState ) {
-        console.log('letterState')
-      },
-    },
-    writeletter: {
-      onEnter: function( evt, previousState ) {
-        console.log('writeLetterState')
-        if(evt.target.classList.contains('cancel')) {
-          writeletter.onExit(evt, 'letter')
-        }
-        console.log(evt.target.innerText)
-        console.log(evt.target)
-      },
-      onExit: function( evt, nextState ) {
-        // jquery(this).removeClass('active')
-      },
-      events: {
-        click: "letter"
-      }
-    },
-    nextletter: {
-      onEnter: function( evt, previousState ) {
-        console.log("nextLetterState")
-        let classes = jQuery(evt.target).next().attr('class').split(/\s+/)
-        for(let class_name in classes) {
-          if(class_name.startsWith('place-')) {
-            console.log(class_name)
-            this.firstChild().removeClass()
-          }
-        }
-      },
-      onExit: function( evt, nextState ) {
-        // jquery(this).removeClass('active')
-      },
-      events: {
-        click: "letter"
-      }
-    },
-    active: {
-      onEnter: function( evt, previousState ) {
-        jquery(this).addClass('row-selected')
-      },
-      onExit: function( evt, nextState ) {
-        jquery(this).removeClass('row-selected')
-      },
-      events: {
-        click: "inactive"
-      }
+  var activeRow = jquery('.row').first()
+  var currentLetterBox = activeRow.children().first()
+  var currentLetterDiv = null
+  currentLetterBox.toggleClass('focused')
+
+  jquery(document).keydown(function (event) {
+    if (event.key === 'ArrowUp') {
+      activateLetterBox(currentLetterBox)
     }
   })
 
+  function focusOnNextLetterBox (letterBox) {
+    currentLetterBox = letterBox.next()
+    letterBox.removeClass('focused')
+    if (currentLetterBox.length == 0) {
+      currentLetterBox = letterBox.siblings().first()
+    }
+    currentLetterBox.toggleClass('focused')
+  }
+
+  function focusOnNextLetterDiv (letterDiv) {
+    if (letterDiv === null) {
+      letterDiv = currentLetterBox.children()[1]
+    }
+    currentLetterDiv = letterDiv.next()
+    // set selector class to selector
+    if (currentLetterDiv.length == 0) {
+      currentLetterDiv = letterDiv.siblings()[1]
+    }
+    // apply new selector position class
+    currentLetterDiv.toggleClass('focused')
+  }
+
+  function activateLetterBox (letterBox) {
+    letterBox.removeClass('focused')
+    letterBox.toggleClass('active')
+  }
 
   // WEBSOCKETS STUFF
   var webSocket = jquery.simpleWebSocket({
@@ -98,14 +74,24 @@
   var activeLetter = null
 
   function mainLoop () {
-    var activeRow = jquery('.row-selected')
-    if (activeRow.length == 1) {
-      activeRow = activeRow.first()
+    if (!currentLetterBox.hasClass('active')) {
+      focusOnNextLetterBox(currentLetterBox)
     } else {
+      var selector = currentLetterBox.children().first()
+      // just update `currentLetterDiv` here
+      if (selector.hasClass('place-1')) {
+        // write  second letter
+      } else if (selector.hasClass('place-2')) {
+        // write  second letter
+        // and so on fo other elements
+      } else {
+        // cancel button
+      }
+      focusOnNextLetterDiv(currentLetterDiv)
     }
   }
 
   jquery(document).ready(function () {
-   setInterval(mainLoop, 1000);
+   setInterval(mainLoop, 2000);
   })
 })($ || {})
