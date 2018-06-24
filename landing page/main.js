@@ -7,9 +7,26 @@
 
   jquery(document).keydown(function (event) {
     if (event.key === 'ArrowUp') {
+      if (currentLetterDiv !== null) {
+        jquery('#new-text').text(
+          jquery('#new-text').text() + currentLetterDiv.innerText
+        )
+        currentLetterDiv = null
+      }
       activateLetterBox(currentLetterBox)
     }
   })
+
+  function runIt () {
+    console.log('running it with cap!')
+    if (currentLetterDiv !== null) {
+      jquery('#new-text').text(
+        jquery('#new-text').text() + currentLetterDiv.innerText
+      )
+      currentLetterDiv = null
+    }
+    activateLetterBox(currentLetterBox)
+  }
 
   function focusOnNextLetterBox (letterBox) {
     currentLetterBox = letterBox.next()
@@ -48,10 +65,12 @@
         } else {
           // both eyes
           console.log('trigger single click')
+          // runIt()
         }
       } else {
         // double blinking
         console.log('trigger double click')
+        // runIt()
       }
     })
 
