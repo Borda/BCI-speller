@@ -10,9 +10,11 @@ import matplotlib.pyplot as plt
 
 import bci.data_utils as tl_data
 
-PLOT_DURATION = 3.0
+SAMPLING_FREQ = 250
+RECORD_HISTORY = 5 * SAMPLING_FREQ
+PLOT_OFFSET = 4 * SAMPLING_FREQ
 EEG_CHANNELS = 14
-SIGNAL_RANGE = [-1000, 1000]
+SIGNAL_RANGE = [-250, 250]
 FRAME_REFRESH = 100
 
 # first resolve an EEG stream on the lab network
@@ -31,7 +33,6 @@ class Window(QtWidgets.QDialog):
         # a figure instance to plot on
         self.figure = plt.figure(figsize=(20, 5))
         # data
-        self.timestamps = None
         self.signals = None
 
         # this is the Canvas Widget that displays the `figure`
@@ -54,19 +55,15 @@ class Window(QtWidgets.QDialog):
 
     def update(self):
         """ plot some random stuff """
-        chunk, tstamps = inlet.pull_chunk(timeout=0.0, max_samples=128)
+        chunk, tstamps = inlet.pull_chunk(timeout=0.0, max_samples=2048)
+        # IMPORTANT: drop the timestemps because it does not reflect the measurement time
         if tstamps:
-            tstamps = np.asarray(tstamps)
             ys = np.asarray(chunk)
-            t0 = np.max(tstamps) - PLOT_DURATION
 
-            if self.timestamps is None:
+            if self.signals is None:
                 self.signals = ys.copy()
-                self.timestamps = tstamps.copy()
             else:
-                mask = self.timestamps > t0
-                self.timestamps = np.hstack([self.timestamps[mask], tstamps])
-                self.signals = np.vstack([self.signals[mask], ys])
+                self.signals = np.vstack([self.signals, ys])[-RECORD_HISTORY:]
         self.plot()
 
     def plot(self):
@@ -77,15 +74,17 @@ class Window(QtWidgets.QDialog):
         # discards the old graph
         # ax.hold(False) # deprecated, see above
         # plot data
-        if self.timestamps is not None:
+        if self.signals is not None:
             for ch in range(EEG_CHANNELS):
-                sig = tl_data.filter_signal(self.signals[:, ch])
-                # sig = self.signals[:, ch] - np.mean(self.signals[:, ch])
-                ax.plot(self.timestamps, sig,
+                # sig = self.signals[2000:, ch]
+                # TODO: add real time filtering
+                sig = tl_data.filter_signal(self.signals[:, ch], bands=[1, 120])
+                # sig = sig - np.mean(sig)
+                ax.plot(sig[PLOT_OFFSET:],
                         label=str(ch + 1))
-            ax.set_xlim([min(self.timestamps), max(self.timestamps)])
-            ax.legend()
-        # ax.set_ylim(SIGNAL_RANGE)
+            #ax.set_xlim([min(self.timestamps), max(self.timestamps)])
+            ax.legend(loc=2)
+        ax.set_ylim(SIGNAL_RANGE)
         ax.grid()
         # refresh canvas
         self.canvas.draw()
