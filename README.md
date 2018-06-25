@@ -1,12 +1,12 @@
 # BCI-hack
 
-[![Build Status](https://travis-ci.org/Borda/BCI-hack.svg?branch=master)](https://travis-ci.org/Borda/BCI-hack)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/13370f2cbed3432c91eda68954f15288)](https://www.codacy.com/app/Borda/BCI-hack?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Borda/BCI-hack&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/Borda/BCI-speller.svg?branch=master)](https://travis-ci.org/Borda/BCI-speller)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bcd9d6fe109542ddbfa645c1cd9c50fb)](https://www.codacy.com/app/Borda/BCI-speller?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Borda/BCI-speller&amp;utm_campaign=Badge_Grade)
 
 **Authors:**
 Łukasz Skarżyński &
-Jan Toman &
 Jiri Borovec &
+Jan Toman &
 Marcin Matłacz
 
 ## Blinking keyboard
