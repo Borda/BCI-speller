@@ -62,4 +62,14 @@ def filter_signal(sig, bands=(0.5, 120)):
     return sig
 
 
-# TODO: online data filtering
+def filter_signal_online(signals_old, signals_new, bands=(0.5, 120), ):
+    # FIXME: online data filtering
+    if signals_old is None:
+        signals = signals_new.copy()
+    else:
+        signals = np.vstack([signals_old, signals_new])
+
+    for ch in range(signals.shape[1]):
+        # TODO: add real time filtering
+        signals[:, ch] = filter_signal(signals[:, ch], bands)
+    return signals

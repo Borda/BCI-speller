@@ -1,4 +1,5 @@
 import sys
+import logging
 import numpy as np
 import pylsl
 from PyQt5 import QtCore, QtWidgets
@@ -10,25 +11,18 @@ import matplotlib.pyplot as plt
 
 import bci.data_utils as tl_data
 
-SAMPLING_FREQ = 250
-RECORD_HISTORY = 5 * SAMPLING_FREQ
-PLOT_OFFSET = 4 * SAMPLING_FREQ
-EEG_CHANNELS = 14
-SIGNAL_RANGE = [-250, 250]
-FRAME_REFRESH = 100
 
-# first resolve an EEG stream on the lab network
-print("looking for an EEG stream...")
-streams = pylsl.resolve_stream('type', 'EEG')
+class WaveViewer(QtWidgets.QDialog):
 
-# create a new inlet to read from the stream
-inlet = pylsl.StreamInlet(streams[0])
-
-
-class Window(QtWidgets.QDialog):
+    SAMPLING_FREQ = 250
+    RECORD_HISTORY = 5 * SAMPLING_FREQ
+    PLOT_OFFSET = 4 * SAMPLING_FREQ
+    EEG_CHANNELS = 14
+    SIGNAL_RANGE = [-250, 250]
+    FRAME_REFRESH = 100
 
     def __init__(self, parent=None):
-        super(Window, self).__init__(parent)
+        super(WaveViewer, self).__init__(parent)
 
         # a figure instance to plot on
         self.figure = plt.figure(figsize=(20, 5))
@@ -45,7 +39,7 @@ class Window(QtWidgets.QDialog):
         # Just some timer connected to `plot` method
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.update)
-        self.timer.start(FRAME_REFRESH)
+        self.timer.start(self.FRAME_REFRESH)
 
         # set the layout
         layout = QtWidgets.QVBoxLayout()
@@ -53,17 +47,20 @@ class Window(QtWidgets.QDialog):
         layout.addWidget(self.canvas)
         self.setLayout(layout)
 
+        # resolve an EEG stream on the lab network
+        logging.info("looking for an EEG stream...")
+        streams = pylsl.resolve_stream('type', 'EEG')
+
+        # create a new inlet to read from the stream
+        self.inlet = pylsl.StreamInlet(streams[0])
+
     def update(self):
         """ plot some random stuff """
-        chunk, tstamps = inlet.pull_chunk(timeout=0.0, max_samples=2048)
+        chunk, tstamps = self.inlet.pull_chunk(timeout=0.0, max_samples=2048)
         # IMPORTANT: drop the timestemps because it does not reflect the measurement time
         if tstamps:
-            ys = np.asarray(chunk)
-
-            if self.signals is None:
-                self.signals = ys.copy()
-            else:
-                self.signals = np.vstack([self.signals, ys])[-RECORD_HISTORY:]
+            sig = np.asarray(chunk)
+            self.signals = tl_data.filter_signal_online(self.signals, sig)[-self.RECORD_HISTORY:]
         self.plot()
 
     def plot(self):
@@ -75,16 +72,13 @@ class Window(QtWidgets.QDialog):
         # ax.hold(False) # deprecated, see above
         # plot data
         if self.signals is not None:
-            for ch in range(EEG_CHANNELS):
-                # sig = self.signals[2000:, ch]
-                # TODO: add real time filtering
-                sig = tl_data.filter_signal(self.signals[:, ch], bands=[1, 120])
+            for ch in range(self.EEG_CHANNELS):
+                sig = self.signals[2000:, ch]
                 # sig = sig - np.mean(sig)
-                ax.plot(sig[PLOT_OFFSET:],
-                        label=str(ch + 1))
+                ax.plot(sig[self.PLOT_OFFSET:], label=str(ch + 1))
             #ax.set_xlim([min(self.timestamps), max(self.timestamps)])
             ax.legend(loc=2)
-        ax.set_ylim(SIGNAL_RANGE)
+        ax.set_ylim(self.SIGNAL_RANGE)
         ax.grid()
         # refresh canvas
         self.canvas.draw()
@@ -93,7 +87,7 @@ class Window(QtWidgets.QDialog):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    main = Window()
+    main = WaveViewer()
     main.show()
 
     sys.exit(app.exec_())
