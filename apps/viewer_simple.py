@@ -56,7 +56,7 @@ class WaveViewer(QtWidgets.QDialog):
 
     def update(self):
         """ plot some random stuff """
-        chunk, tstamps = self.inlet.pull_chunk(timeout=0.0, max_samples=2048)
+        chunk, tstamps = self.inlet.pull_chunk(timeout=0.0, max_samples=512)
         # IMPORTANT: drop the timestemps because it does not reflect the measurement time
         if tstamps:
             sig = np.asarray(chunk)
@@ -73,10 +73,10 @@ class WaveViewer(QtWidgets.QDialog):
         # plot data
         if self.signals is not None:
             for ch in range(self.EEG_CHANNELS):
-                sig = self.signals[2000:, ch]
+                sig = self.signals[:, ch]
                 # sig = sig - np.mean(sig)
-                ax.plot(sig[self.PLOT_OFFSET:], label=str(ch + 1))
-            #ax.set_xlim([min(self.timestamps), max(self.timestamps)])
+                ax.plot(sig, label=str(ch + 1))
+            ax.set_xlim([0, len(self.signals)])
             ax.legend(loc=2)
         ax.set_ylim(self.SIGNAL_RANGE)
         ax.grid()

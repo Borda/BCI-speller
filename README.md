@@ -17,11 +17,11 @@ See [Writing-with-our-mind](https://devpost.com/software/writing-with-our-mind).
 ## Applications
 
 The whole workflow:
-1. Receiving raw signal from BS interface [blueatooth]
-1. Processing & cleaning signals from BCI
-1. Detecting commands and sending to backend [sockets]
-2. Broadcasting actions from backend to frontend
-3. Controlling the keyboard in the frontend application
+1. Receiving raw signal from BS interface [blueatooth] (`apps/detector_peaks.py`)
+1. Processing & cleaning signals from BCI (`apps/detector_peaks.py`)
+1. Detecting commands and sending to backend [sockets] (`apps/detector_peaks.py`)
+2. Broadcasting actions from backend to frontend (`apps/websocket_client.py` & `web_speller/*`)
+3. Controlling the keyboard in the frontend application (`web_speller/*`)
 
 
 ### Data processing
@@ -29,8 +29,10 @@ The whole workflow:
 The data processing application is decoding BCI signal and sending commands to backend.
 The used communication to the BCI devise is [labstreaminglayer](https://github.com/sccn/labstreaminglayer).
 
-Minor TODO:
+Future ideas:
 * detect blinking
+
+To simulate data sending use `apps/simul_send_data.py`
 
 ### BackEnd
 

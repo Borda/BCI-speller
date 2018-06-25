@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 import bci.data_utils as tl_data
 from apps.websocket_client import WebSocketClient
-from apps.simple_viewer import WaveViewer
+from apps.viewer_simple import WaveViewer
 
 SOCKET_LINK = 'ws://192.168.7.14:8000/ws/bci/U123/'
 
