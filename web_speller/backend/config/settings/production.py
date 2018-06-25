@@ -1,5 +1,5 @@
 """
-Production settings for bci_speller project.
+Production settings for web_speller project.
 
 - Use Redis for cache
 - Use sentry for error logging
@@ -59,8 +59,8 @@ INSTALLED_APPS += ['gunicorn', ]
 
 # EMAIL
 # ------------------------------------------------------------------------------
-DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL', default='bci_speller <noreply@none.localhost:8080>')
-EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[bci_speller]')
+DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL', default='web_speller <noreply@none.localhost:8080>')
+EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[web_speller]')
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 
 

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:  #&app
-    container_name: app-bci_speller
+    container_name: app-web_speller
     build:
       context: .
       dockerfile: ./docker/local/backend/Dockerfile
@@ -17,7 +17,7 @@ services:
       - ./shared/templates:/app/shared/templates
 
   redis:
-    container_name: redis-bci_speller
+    container_name: redis-web_speller
     image: redis:3.0
     ports:
       - "6379:6379"

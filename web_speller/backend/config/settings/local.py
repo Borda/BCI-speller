@@ -1,5 +1,5 @@
 """
-Local settings for bci_speller project.
+Local settings for web_speller project.
 
 - Run in Debug mode
 - Use console backend for emails

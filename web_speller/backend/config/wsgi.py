@@ -1,5 +1,5 @@
 """
-WSGI config for bci_speller project.
+WSGI config for web_speller project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -19,7 +19,7 @@ import sys
 from django.core.wsgi import get_wsgi_application
 
 # This allows easy placement of apps within the interior
-# bci_speller directory.
+# web_speller directory.
 # app_path = os.path.dirname(os.path.abspath(__file__)).replace('/config', '')
 # sys.path.append(os.path.join(app_path, 'backend'))
 

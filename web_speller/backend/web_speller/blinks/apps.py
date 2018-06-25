@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class BlinksConfig(AppConfig):
-    name = 'bci_speller.blinks'
+    name = 'web_speller.blinks'
     verbose_name = "Blinks"
 
     def ready(self):

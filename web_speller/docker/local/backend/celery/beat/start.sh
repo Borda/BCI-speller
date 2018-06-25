@@ -5,4 +5,5 @@ set -o pipefail
 set -o nounset
 set -o xtrace
 
-celery -A bci_speller.taskapp worker -l INFO
+rm -f './celerybeat.pid'
+celery -A web_speller.taskapp beat -l INFO

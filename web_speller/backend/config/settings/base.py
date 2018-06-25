@@ -1,5 +1,5 @@
 """
-Base settings for bci_speller project.
+Base settings for web_speller project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/dev/topics/settings/
@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 import environ
 
-# (bci_speller/backend/config/settings/base.py - 3 = bci_speller/backend) or inside docker container is path /app
+# (web_speller/backend/config/settings/base.py - 3 = web_speller/backend) or inside docker container is path /app
 APPS_DIR = environ.Path(__file__) - 3
 
 # Load operating system environment variables and then prepare to use them
@@ -59,7 +59,7 @@ THIRD_PARTY_APPS = [
 
 # Apps specific for this project go here.
 LOCAL_APPS = [
-    'bci_speller.blinks.apps.BlinksConfig',
+    'web_speller.blinks.apps.BlinksConfig',
 ]
 
 
@@ -83,7 +83,7 @@ MIDDLEWARE = [
 # MIGRATIONS CONFIGURATION
 # ------------------------------------------------------------------------------
 MIGRATION_MODULES = {
-    'sites': 'bci_speller.contrib.sites.migrations'
+    'sites': 'web_speller.contrib.sites.migrations'
 }
 
 
@@ -325,7 +325,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('redis-bci_speller', 6379)],
+            "hosts": [('redis-web_speller', 6379)],
         },
     },
 }

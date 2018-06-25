@@ -1,5 +1,5 @@
 """
-Test settings for bci_speller project.
+Test settings for web_speller project.
 
 - Used to run tests fast on the continuous integration server and locally
 """

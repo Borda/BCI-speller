@@ -14,7 +14,7 @@ def update_site_forward(apps, schema_editor):
         id=settings.SITE_ID,
         defaults={
             'domain': 'none.localhost:8080',
-            'name': 'bci_speller'
+            'name': 'web_speller'
         }
     )
 

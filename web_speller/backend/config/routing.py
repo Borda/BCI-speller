@@ -4,7 +4,7 @@ from channels.routing import (
     URLRouter,
 )
 
-from bci_speller.blinks import routing
+from web_speller.blinks import routing
 
 application = ProtocolTypeRouter({
     # (http->django views is added by default)
